@@ -13,4 +13,5 @@ coverage/
 Thumbs.db
 
 # VS Code config
-.vscode/
+.vscode/node_modules/
+.angular/cache/
