@@ -1,0 +1,62 @@
+/* Header de Usuario mejorado */
+.header-usuario {
+  background-color: #263238; /* color oscuro */
+  color: #ffffff;
+  border-radius: 6px 6px 0 0; /* solo redondear arriba */
+  padding: 1.2rem 1.5rem; /* espacio vertical y horizontal */
+  display: flex;
+  align-items: center; /* centra verticalmente */
+  justify-content: space-between; /* texto a la izquierda, botones a la derecha */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* opcional: sombra ligera */
+}
+
+.header-usuario h5 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.5rem; /* texto más grande */
+}
+
+.header-usuario .btn {
+  min-width: 110px; /* ancho mínimo */
+  margin-left: 0.5rem; /* separación entre botones */
+}
+
+/* Botones Usuario */
+.btn-guardar-usuario {
+  background: #0d6efd;
+  color: #fff;
+}
+
+.btn-guardar-usuario:hover {
+  background: #1971b6;
+}
+
+.btn-actualizar-usuario {
+  background: #198754;
+  color: #fff;
+}
+
+/* Wrapper para que no quede pegado */
+.header-usuario-wrapper {
+  padding: 15px;
+}
+.usuario-container .d-flex div {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.usuario-container .badge {
+  cursor: pointer;
+}.usuario-container .form-check {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.usuario-container .badge {
+  cursor: pointer;
+}
+
+.usuario-container .card-header h5 {
+  margin: 0;
+}

@@ -1,0 +1,651 @@
+<div class="content">
+  <!-- begin breadcrumb -->
+  <ol class="breadcrumb float-xl-end">
+    <li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
+    <li class="breadcrumb-item"><a href="javascript:;">DUCA</a></li>
+    <li class="breadcrumb-item active"><a href="javascript:;">Registro</a></li>
+  </ol>
+  <!-- end breadcrumb -->
+
+  <!-- begin page-header -->
+  <h1 class="page-header">
+    Registro de DUCA
+
+    <!-- Estado inicial (N) -->
+    <small *ngIf="estadoDuca === 'N'">
+      Complete los campos para registrar un DUCA
+    </small>
+
+    <!-- Estado Temporal (T) -->
+    <small *ngIf="estadoDuca === 'T'">
+      Complete los campos para registrar un DUCA —
+      <strong>Identificador Temporal: {{ iddtTemporal }}</strong>
+    </small>
+
+    <!-- Estado Validado (V) -->
+    <small *ngIf="estadoDuca === 'V'">
+      DUCA Validada —
+      <strong>Identificador Temporal: {{ iddtTemporal }}</strong>
+    </small>
+
+    <!-- Estado Registrado (R) -->
+    <small *ngIf="estadoDuca === 'R'">
+      <strong>DUCA: {{ iddtDefinitivo }}</strong>
+    </small>
+  </h1>
+  <!-- end page-header -->
+
+  <!-- begin wizard -->
+  <div class="nav-wizards-container">
+    <nav class="nav nav-wizards-1 mb-2">
+      <div class="nav-item col">
+        <a class="nav-link" [ngClass]="{ 'completed': currentStep > 1, 'active': currentStep === 1 }" (click)="goToStep(1)">
+          <div class="nav-no">1</div>
+          <div class="nav-text">Generales</div>
+        </a>
+      </div>
+      <div class="nav-item col">
+        <a class="nav-link" [ngClass]="{ 'completed': currentStep > 2, 'active': currentStep === 2 }" (click)="goToStep(2)">
+          <div class="nav-no">2</div>
+          <div class="nav-text">Bultos</div>
+        </a>
+      </div>
+      <div class="nav-item col">
+        <a class="nav-link" [ngClass]="{ 'completed': currentStep > 3, 'active': currentStep === 3 }" (click)="goToStep(3)">
+          <div class="nav-no">3</div>
+          <div class="nav-text">Items</div>
+        </a>
+      </div>
+      <div class="nav-item col">
+        <a class="nav-link" [ngClass]="{ 'completed': currentStep > 4, 'active': currentStep === 4 }" (click)="goToStep(4)">
+          <div class="nav-no">4</div>
+          <div class="nav-text">Transportes</div>
+        </a>
+      </div>
+      <div class="nav-item col">
+        <a class="nav-link" [ngClass]="{ 'completed': currentStep > 5, 'active': currentStep === 5 }" (click)="goToStep(5)">
+          <div class="nav-no">5</div>
+          <div class="nav-text">Documentos</div>
+        </a>
+      </div>
+      <div class="nav-item col">
+        <a class="nav-link" [ngClass]="{ 'completed': currentStep > 6, 'active': currentStep === 6 }" (click)="goToStep(6)">
+          <div class="nav-no">6</div>
+          <div class="nav-text">Complementarios</div>
+        </a>
+      </div>
+    </nav>
+  </div>
+  <!-- end wizard -->
+
+  <!-- begin wizard content -->
+  <div class="card">
+    <div class="card-body">
+      <div *ngIf="currentStep === 1">
+        <!-- Paso 1: Generales -->
+        <form [formGroup]="ducaForm" (ngSubmit)="submitForm()">
+          <!-- Campo Declarante -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="declarante" class="form-label">Declarante</label>
+              <input id="declarante" type="text" class="form-control text-uppercase" formControlName="declarante" disabled>
+            </div>
+            <div class="col-md-6">
+              <label for="aduanaDespacho" class="form-label">Aduana de Despacho</label>
+              <select id="aduanaDespacho" class="form-select text-uppercase" formControlName="aduanaDespacho">
+                <option *ngFor="let aduana of aduanas" [value]="aduana">{{ aduana }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Campo Régimen Aduanero -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="regimenAduanero" class="form-label">Régimen Aduanero</label>
+              <select id="regimenAduanero" class="form-select text-uppercase" formControlName="regimenAduanero">
+                <option *ngFor="let regimen of regimenesAduaneros" [value]="regimen">{{ regimen }}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="rtnImportadorExportador" class="form-label">RTN Importador/Exportador</label>
+              <input id="rtnImportadorExportador" type="text" class="form-control text-uppercase" formControlName="rtnImportadorExportador">
+            </div>
+          </div>
+
+          <!-- Campos Importador/Exportador y Agencia Aduanera -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="importadorExportador" class="form-label">Importador/Exportador</label>
+              <input id="importadorExportador" type="text" class="form-control text-uppercase" formControlName="importadorExportador" disabled>
+            </div>
+            <div class="col-md-6">
+              <label for="rtnAgenciaAduanera" class="form-label">RTN Agencia Aduanera</label>
+              <input id="rtnAgenciaAduanera" type="text" class="form-control text-uppercase" formControlName="rtnAgenciaAduanera">
+            </div>
+          </div>
+
+          <!-- Campos Agencia Aduanera y Manifiesto -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="agenciaAduanera" class="form-label">Agencia Aduanera</label>
+              <input id="agenciaAduanera" type="text" class="form-control text-uppercase" formControlName="agenciaAduanera" disabled>
+            </div>
+            <div class="col-md-6">
+              <label for="idManifiestoEntregaRapida" class="form-label">ID Manifiesto Entrega Rápida</label>
+              <input id="idManifiestoEntregaRapida" type="text" class="form-control text-uppercase" formControlName="idManifiestoEntregaRapida">
+            </div>
+          </div>
+
+          <!-- Campos Proveedor/Destinatario -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="nombreProveedorDestinatario" class="form-label">Nombre Proveedor/Destinatario</label>
+              <input id="nombreProveedorDestinatario" type="text" class="form-control text-uppercase" formControlName="nombreProveedorDestinatario">
+            </div>
+            <div class="col-md-6">
+              <label for="contratoProveedorDestinatario" class="form-label">Contrato Proveedor/Destinatario</label>
+              <input id="contratoProveedorDestinatario" type="text" class="form-control text-uppercase" formControlName="contratoProveedorDestinatario">
+            </div>
+          </div>
+
+          <!-- Campos Domicilio y Número Preimpreso -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="domicilioProveedor" class="form-label">Domicilio del Proveedor</label>
+              <input id="domicilioProveedor" type="text" class="form-control text-uppercase" formControlName="domicilioProveedor">
+            </div>
+            <div class="col-md-6">
+              <label for="numeroPreimpreso" class="form-label">Número de Preimpreso</label>
+              <input id="numeroPreimpreso" type="text" class="form-control text-uppercase" formControlName="numeroPreimpreso">
+            </div>
+          </div>
+
+          <!-- Campos Entidad Mediación y Depósito -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="entidadMediacion" class="form-label">Entidad Mediación</label>
+              <input id="entidadMediacion" type="text" class="form-control text-uppercase" formControlName="entidadMediacion">
+            </div>
+            <div class="col-md-6">
+              <label for="depositoAlmacenamiento" class="form-label">Depósito de Almacenamiento</label>
+              <input id="depositoAlmacenamiento" type="text" class="form-control text-uppercase" formControlName="depositoAlmacenamiento">
+            </div>
+          </div>
+
+          <!-- Campos Aduana y País -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="aduanaIngresoSalida" class="form-label">Aduana de Ingreso/Salida</label>
+              <select id="aduanaIngresoSalida" class="form-select text-uppercase" formControlName="aduanaIngresoSalida">
+                <option *ngFor="let aduana of aduanas" [value]="aduana">{{ aduana }}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="paisOrigen" class="form-label">País de Origen</label>
+                  <select id="paisOrigen" class="form-select" formControlName="paisOrigen">
+                    <option *ngFor="let pais of paises" [value]="pais.value">{{ pais.label }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Campos Forma de Pago y Condición de Entrega -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="formaPago" class="form-label">Forma de Pago</label>
+              <select id="formaPago" class="form-select text-uppercase" formControlName="formaPago">
+                <option *ngFor="let forma of formasPago" [value]="forma">{{ forma }}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="condicionEntrega" class="form-label">Condición de Entrega</label>
+              <select id="condicionEntrega" class="form-select text-uppercase" formControlName="condicionEntrega">
+                <option *ngFor="let condicion of condicionesEntrega" [value]="condicion">{{ condicion }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Campo Observaciones -->
+          <div class="mb-3">
+            <label for="observaciones" class="form-label">Observaciones</label>
+            <textarea id="observaciones" class="form-control text-uppercase" formControlName="observaciones" rows="3"></textarea>
+          </div>
+
+          <!-- Botón Enviar -->
+          <button type="submit" class="btn btn-primary" [disabled]="ducaForm.invalid">Guardar Generales</button>
+        </form>
+      </div>
+
+      <div *ngIf="currentStep === 2">
+        <!-- Paso 2: Bultos -->
+        <div class="panel panel-inverse">
+          <div class="panel-heading">
+            <h4 class="panel-title">Bultos</h4>
+            <div class="panel-heading-btn">
+              <a href="#" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand">
+                <i class="fa fa-expand"></i>
+              </a>
+            </div>
+          </div>
+          <div class="panel-body">
+            <form [formGroup]="bultosForm" (ngSubmit)="submitBultos()">
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <label for="manifiesto" class="form-label">Manifiesto</label>
+                  <input id="manifiesto" type="text" class="form-control" formControlName="manifiesto">
+                </div>
+                <div class="col-md-4">
+                  <label for="tituloTransporte" class="form-label">Título de Transporte</label>
+                  <input id="tituloTransporte" type="text" class="form-control" formControlName="tituloTransporte">
+                </div>
+                <div class="col-md-4">
+                  <label for="indicadorCancelacion" class="form-label">Indicador de Cancelación Global</label>
+                  <select id="indicadorCancelacion" class="form-select" formControlName="indicadorCancelacion">
+                    <option value="" disabled selected>-SELECCIONE-</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Subformulario: Listado Líneas -->
+        <div class="panel panel-inverse mt-4">
+          <div class="panel-heading">
+            <h4 class="panel-title">Listado Líneas</h4>
+            <div class="panel-heading-btn">
+              <button class="btn btn-xs btn-primary" (click)="addLinea()">Agregar Línea</button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <!-- Campos para ingresar líneas -->
+            <form [formGroup]="lineaForm" (ngSubmit)="addLinea()">
+              <div class="row mb-3">
+                <div class="col-md-3">
+                  <label for="numeroLinea" class="form-label">Número de Línea</label>
+                  <input id="numeroLinea" type="number" class="form-control" formControlName="numeroLinea" (keypress)="validateNumericInput($event)">
+                </div>
+                <div class="col-md-3">
+                  <label for="cantidadUnidades" class="form-label">Cantidad de Unidades Afectadas</label>
+                  <input id="cantidadUnidades" type="number" class="form-control" formControlName="cantidadUnidades" (keypress)="validateNumericInput($event)">
+                </div>
+                <div class="col-md-3">
+                  <label for="pesoAfectado" class="form-label">Peso Afectado</label>
+                  <input id="pesoAfectado" type="number" class="form-control" formControlName="pesoAfectado" (keypress)="validateNumericInput($event)">
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                  <button type="submit" class="btn btn-primary w-100">Agregar Línea</button>
+                </div>
+              </div>
+            </form>
+
+            <!-- Tabla de Líneas con búsqueda -->
+            <div class="row mb-3 align-items-center">
+              <div class="col-md-4">
+                <input id="buscar" type="text" class="form-control form-control-sm" placeholder="Buscar en la tabla..." (input)="buscarLinea($event)">
+              </div>
+              <div class="col-md-2">
+                <select id="verCantidad" class="form-select form-select-sm" (change)="cambiarCantidad($event)">
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                </select>
+              </div>
+            </div>
+
+            <table id="data-table-rowreorder" class="table table-striped table-bordered align-middle text-nowrap">
+              <thead>
+                <tr>
+                  <th>Número de Línea</th>
+                  <th>Cantidad de Unidades Afectadas</th>
+                  <th>Peso Afectado</th>
+                  <th colspan="3" class="text-center">Opciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let linea of lineasFiltradas; let i = index">
+                  <td>
+                    <input type="number" class="form-control form-control-sm" [(ngModel)]="linea.numeroLinea" (keypress)="validateNumericInput($event)">
+                  </td>
+                  <td>
+                    <input type="number" class="form-control form-control-sm" [(ngModel)]="linea.cantidadUnidades" (keypress)="validateNumericInput($event)">
+                  </td>
+                  <td>
+                    <input type="number" class="form-control form-control-sm" [(ngModel)]="linea.pesoAfectado" (keypress)="validateNumericInput($event)">
+                  </td>
+                  <td class="text-center">
+                    <button class="btn btn-success btn-sm" (click)="guardarLinea(i)">
+                      <i class="fa fa-save"></i>
+                    </button>
+                  </td>
+                  <td class="text-center">
+                    <button class="btn btn-warning btn-sm" (click)="editarLinea(i)">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                  </td>
+                  <td class="text-center">
+                    <button class="btn btn-danger btn-sm" (click)="borrarLinea(i)">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="currentStep === 3">
+        <!-- Paso 3: Items -->
+        <div class="panel panel-inverse">
+          <div class="panel-heading">
+            <h4 class="panel-title">AGREGAR ITEM</h4>
+          </div>
+          <div class="panel-body">
+            <form [formGroup]="itemForm" (ngSubmit)="submitItem()">
+              <div class="row mb-3">
+                <div class="col-md-3">
+                  <label for="numeroItem" class="form-label">Número de Ítem</label>
+                  <input id="numeroItem" type="number" class="form-control" formControlName="numeroItem" maxlength="5">
+                </div>
+                <div class="col-md-3">
+                  <label for="tipoItem" class="form-label">Tipo de Ítem</label>
+                  <select id="tipoItem" class="form-select" formControlName="tipoItem">
+                    <option *ngFor="let tipo of tiposItem" [value]="tipo.value">{{ tipo.label }}</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label for="posicionArancelaria" class="form-label">Posición Arancelaria</label>
+                  <input id="posicionArancelaria" type="text" class="form-control" formControlName="posicionArancelaria" maxlength="16" pattern="[0-9.]*">
+                </div>
+                <div class="col-md-3">
+                  <label for="tituloManifiesto" class="form-label">Título de Manifiesto Curier</label>
+                  <input id="tituloManifiesto" type="text" class="form-control text-uppercase" formControlName="tituloManifiesto">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3">
+                  <label for="idMatrizInsumos" class="form-label">ID Matriz Insumos</label>
+                  <input id="idMatrizInsumos" type="text" class="form-control text-uppercase" formControlName="idMatrizInsumos">
+                </div>
+                <div class="col-md-3">
+                  <label for="numeroItemAsociado" class="form-label">Número Ítem Asociado</label>
+                  <input id="numeroItemAsociado" type="number" class="form-control" formControlName="numeroItemAsociado">
+                </div>
+                <div class="col-md-3">
+                  <label for="declaracionCancelar" class="form-label">Declaración a Cancelar</label>
+                  <input id="declaracionCancelar" type="text" class="form-control text-uppercase" formControlName="declaracionCancelar">
+                </div>
+                <div class="col-md-3">
+                  <label for="numeroItemCancelar" class="form-label">Número Ítem a Cancelar</label>
+                  <input id="numeroItemCancelar" type="number" class="form-control" formControlName="numeroItemCancelar">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3">
+                  <label for="pesoNetoKilos" class="form-label">Peso Neto Kilos</label>
+                  <input id="pesoNetoKilos" type="number" class="form-control" formControlName="pesoNetoKilos">
+                </div>
+                <div class="col-md-3">
+                  <label for="pesoBrutoKilos" class="form-label">Peso Bruto Kilos</label>
+                  <input id="pesoBrutoKilos" type="number" class="form-control" formControlName="pesoBrutoKilos">
+                </div>
+                <div class="col-md-3">
+                  <label for="cantidadBultos" class="form-label">Cantidad de Bultos</label>
+                  <input id="cantidadBultos" type="number" class="form-control" formControlName="cantidadBultos">
+                </div>
+                <div class="col-md-3">
+                  <label for="estadoMercancia" class="form-label">Estado de la Mercancía</label>
+                  <select id="estadoMercancia" class="form-select" formControlName="estadoMercancia">
+                    <option *ngFor="let estado of estadosMercancia" [value]="estado.value">{{ estado.label }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3">
+                  <label for="paisOrigen" class="form-label">País de Origen</label>
+                  <select id="paisOrigen" class="form-select" formControlName="paisOrigen">
+                    <option *ngFor="let pais of paises" [value]="pais.value">{{ pais.label }}</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label for="paisProcedencia" class="form-label">País de Procedencia</label>
+                  <select id="paisProcedencia" class="form-select" formControlName="paisProcedencia">
+                    <option *ngFor="let pais of paises" [value]="pais.value">{{ pais.label }}</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label for="paisAdquisicion" class="form-label">País de Adquisición</label>
+                  <select id="paisAdquisicion" class="form-select" formControlName="paisAdquisicion">
+                    <option *ngFor="let pais of paises" [value]="pais.value">{{ pais.label }}</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label for="cuotaArancelaria" class="form-label">Cuota Arancelaria</label>
+                  <select id="cuotaArancelaria" class="form-select" formControlName="cuotaArancelaria">
+                    <option *ngFor="let cuota of cuotasArancelarias" [value]="cuota.value">{{ cuota.label }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3">
+                  <label for="unidadComercial" class="form-label">Unidad Comercial</label>
+                  <select id="unidadComercial" class="form-select" formControlName="unidadComercial">
+                    <option *ngFor="let unidad of unidadesComerciales" [value]="unidad.value">{{ unidad.label }}</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label for="cantidadComercial" class="form-label">Cantidad Comercial</label>
+                  <input id="cantidadComercial" type="number" class="form-control" [(ngModel)]="cantidadComercial">
+                </div>
+                <div class="col-md-3">
+                  <label for="unidadEstadistica" class="form-label">Unidad Estadística</label>
+                  <select id="unidadEstadistica" class="form-select" formControlName="unidadEstadistica">
+                    <option *ngFor="let unidad of unidadesEstadisticas" [value]="unidad.value">{{ unidad.label }}</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label for="cantidadEstadistica" class="form-label">Cantidad Estadística</label>
+                  <input id="cantidadEstadistica" type="number" class="form-control" [(ngModel)]="cantidadEstadistica">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3">
+                  <label for="importeFactura" class="form-label">Importe Factura</label>
+                  <input id="importeFactura" type="number" class="form-control" [(ngModel)]="importeFactura">
+                </div>
+                <div class="col-md-3">
+                  <label for="importeOtrosGastos" class="form-label">Importe Otros Gastos</label>
+                  <input id="importeOtrosGastos" type="number" class="form-control" [(ngModel)]="importeOtrosGastos">
+                </div>
+                <div class="col-md-3">
+                  <label for="importeSeguro" class="form-label">Importe Seguro</label>
+                  <input id="importeSeguro" type="number" class="form-control" [(ngModel)]="importeSeguro">
+                </div>
+                <div class="col-md-3">
+                  <label for="importeFlete" class="form-label">Importe Flete</label>
+                  <input id="importeFlete" type="number" class="form-control" formControlName="importeFlete">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3">
+                  <label for="ajusteIncluir" class="form-label">Ajuste a Incluir</label>
+                  <input id="ajusteIncluir" type="number" class="form-control" formControlName="ajusteIncluir">
+                </div>
+                <div class="col-md-3">
+                  <label for="nroCertificadoImportacion" class="form-label">Nro. Certificado Importación</label>
+                  <input id="nroCertificadoImportacion" type="number" class="form-control" formControlName="nroCertificadoImportacion">
+                </div>
+                <div class="col-md-3">
+                  <label for="convenioPerfeccionado" class="form-label">Convenio Perfeccionado</label>
+                  <input id="convenioPerfeccionado" type="text" class="form-control text-uppercase" formControlName="convenioPerfeccionado">
+                </div>
+                <div class="col-md-3">
+                  <label for="exoneracionAduanera" class="form-label">Exoneración Aduanera</label>
+                  <input id="exoneracionAduanera" type="text" class="form-control text-uppercase" formControlName="exoneracionAduanera">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="descripcion" class="form-label">Descripción</label>
+                  <textarea id="descripcion" class="form-control text-uppercase" formControlName="descripcion" rows="2"></textarea>
+                </div>
+                <div class="col-md-6">
+                  <label for="comentario" class="form-label">Comentario</label>
+                  <textarea id="comentario" class="form-control text-uppercase" formControlName="comentario" rows="2"></textarea>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Agregar Ítem</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Listado de Ítems -->
+        <div class="panel panel-inverse mt-4">
+          <div class="panel-heading">
+            <h4 class="panel-title">Listado de Ítems</h4>
+            <div class="panel-heading-btn">
+              <button class="btn btn-xs btn-primary" (click)="addItem()">Agregar Ítem</button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div style="overflow-x:auto;">
+              <table class="table table-striped table-bordered align-middle text-nowrap">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Número Ítem</th>
+                    <th>Tipo Ítem</th>
+                    <th>Posición Arancelaria</th>
+                    <th>Título Manifiesto</th>
+                    <th>ID Matriz Insumos</th>
+                    <th>Núm. Ítem Asociado</th>
+                    <th>Declaración Cancelar</th>
+                    <th>Núm. Ítem Cancelar</th>
+                    <th>Peso Neto (kg)</th>
+                    <th>Peso Bruto (kg)</th>
+                    <th>Cant. Bultos</th>
+                    <th>Estado Mercancía</th>
+                    <th>País Origen</th>
+                    <th>País Procedencia</th>
+                    <th>País Adquisición</th>
+                    <th>Cuota Arancelaria</th>
+                    <th>Unidad Comercial</th>
+                    <th>Cant. Comercial</th>
+                    <th>Unidad Estadística</th>
+                    <th>Cant. Estadística</th>
+                    <th>Importe Factura</th>
+                    <th>Importe Otros Gastos</th>
+                    <th>Importe Seguro</th>
+                    <th>Importe Flete</th>
+                    <th>Ajuste Incluir</th>
+                    <th>Nro. Cert. Importación</th>
+                    <th>Convenio Perfeccionado</th>
+                    <th>Exoneración Aduanera</th>
+                    <th>Descripción</th>
+                    <th>Comentario</th>
+                    <th>Opciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of items; let idx = index">
+                    <td>{{ idx + 1 }}</td>
+                    <td>{{ item.numeroItem }}</td>
+                    <td>{{ item.tipoItem }}</td>
+                    <td>{{ item.posicionArancelaria }}</td>
+                    <td>{{ item.tituloManifiesto }}</td>
+                    <td>{{ item.idMatrizInsumos }}</td>
+                    <td>{{ item.numeroItemAsociado }}</td>
+                    <td>{{ item.declaracionCancelar }}</td>
+                    <td>{{ item.numeroItemCancelar }}</td>
+                    <td>{{ item.pesoNetoKilos }}</td>
+                    <td>{{ item.pesoBrutoKilos }}</td>
+                    <td>{{ item.cantidadBultos }}</td>
+                    <td>{{ item.estadoMercancia }}</td>
+                    <td>{{ item.paisOrigen }}</td>
+                    <td>{{ item.paisProcedencia }}</td>
+                    <td>{{ item.paisAdquisicion }}</td>
+                    <td>{{ item.cuotaArancelaria }}</td>
+                    <td>{{ item.unidadComercial }}</td>
+                    <td>{{ item.cantidadComercial }}</td>
+                    <td>{{ item.unidadEstadistica }}</td>
+                    <td>{{ item.cantidadEstadistica }}</td>
+                    <td>{{ item.importeFactura }}</td>
+                    <td>{{ item.importeOtrosGastos }}</td>
+                    <td>{{ item.importeSeguro }}</td>
+                    <td>{{ item.importeFlete }}</td>
+                    <td>{{ item.ajusteIncluir }}</td>
+                    <td>{{ item.nroCertificadoImportacion }}</td>
+                    <td>{{ item.convenioPerfeccionado }}</td>
+                    <td>{{ item.exoneracionAduanera }}</td>
+                    <td>{{ item.descripcion }}</td>
+                    <td>{{ item.comentario }}</td>
+                    <td class="text-center">
+                      <button class="btn btn-warning btn-sm me-1" (click)="editarItem(idx)">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                      <button class="btn btn-danger btn-sm" (click)="borrarItem(idx)">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="currentStep === 4">
+        <!-- Paso 4: Transportes -->
+        <h4>Transportes</h4>
+        <p>Formulario de transportes aquí...</p>
+      </div>
+
+      <div *ngIf="currentStep === 5">
+        <!-- Paso 5: Documentos -->
+        <h4>Documentos</h4>
+        <p>Formulario de documentos aquí...</p>
+      </div>
+
+      <div *ngIf="currentStep === 6">
+        <!-- Paso 6: Complementarios -->
+        <h4>Complementarios</h4>
+        <p>Formulario de complementarios aquí...</p>
+      </div>
+    </div>
+  </div>
+  <!-- end wizard content -->
+   <!-- Botones globales (siempre visibles en cualquier paso) -->
+<hr class="my-4">
+<div class="text-center">
+  <button 
+    class="btn btn-success me-2"
+    [disabled]="loading"
+    (click)="crearDuca()">
+    <i class="fa fa-database me-1"></i> Guardar XML en Base de Datos
+  </button>
+
+  <button class="btn btn-primary"
+          *ngIf="iddtActual"
+          (click)="generarXml()">
+    <i class="fa fa-file-code me-1"></i> Generar XML
+  </button>
+
+  <button 
+    class="btn btn-secondary"
+    [disabled]="loading"
+    (click)="goToStep(currentStep + 1)">
+    <i class="fa fa-arrow-right me-1"></i> Siguiente Paso
+  </button>
+</div>
+
+<!-- Loader visual -->
+<div *ngIf="loading" class="text-center mt-3">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Procesando...</span>
+  </div>
+  <p class="mt-2 text-muted">Procesando solicitud...</p>
+</div>
+
+</div>

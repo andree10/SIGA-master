@@ -1,0 +1,157 @@
+<!-- BEGIN #sidebar -->
+<div id="sidebar" class="app-sidebar" [attr.data-bs-theme]="appSettings.appSidebarLight ? '' : 'dark'"
+	[ngClass]="{ 
+	'app-sidebar-transparent': this.appSidebarTransparent,
+	'app-sidebar-grid': this.appSidebarGrid
+}">
+  <!-- BEGIN scrollbar -->
+  <ng-scrollbar class="app-sidebar-content" [ngClass]="{ 'h-100': appSettings.appSidebarFixed }" #sidebarScrollbar (scroll)="onScroll($event)">
+    <div class="menu">
+      <!-- Perfil de usuario -->
+      <div class="menu-item menu-profile">
+        <a href="javascript:;" class="menu-profile-link" (click)="toggleNavProfile($event)">
+          <div class="menu-profile-cover with-shadow"
+            [ngStyle]="{'background-image': 'url(' + (usuario?.logo || '../../../assets/img/empresa/logo.png') + ')'}">
+          </div>
+          <div class="menu-profile-image menu-profile-image-icon bg-gray-900 text-gray-600">
+            <img *ngIf="usuario?.avatar" [src]="usuario.avatar" alt="User Avatar" class="rounded-circle" width="40" height="40">
+            <i *ngIf="!usuario?.avatar" class="material-icons">person</i>
+          </div>
+          <div class="menu-profile-info">
+            <div class="d-flex align-items-center">
+              <div class="flex-grow-1">{{ usuario?.nombre || 'Usuario' }}</div>
+              <div class="menu-caret ms-auto"></div>
+            </div>
+            <small>{{ usuario?.empresa || 'Empresa' }}</small>
+          </div>
+        </a>
+      </div>
+
+      <!-- Menú expandible de Settings -->
+      @if (!appSettings.appSidebarSearch) {
+        <div id="appSidebarProfileMenu" class="collapse">
+          <div class="menu-item pt-5px">
+            <a href="javascript:;" class="menu-link">
+              <div class="menu-icon"><i class="fa fa-cog"></i></div>
+              <div class="menu-text">Ajustes</div>
+            </a>
+          </div>
+          <div class="menu-item">
+            <a href="javascript:;" class="menu-link">
+              <div class="menu-icon"><i class="fa fa-pencil-alt"></i></div>
+              <div class="menu-text">Notificaciones</div>
+            </a>
+          </div>
+          <div class="menu-item pb-5px">
+            <a href="javascript:;" class="menu-link">
+              <div class="menu-icon"><i class="fa fa-question-circle"></i></div>
+              <div class="menu-text">Ayuda</div>
+            </a>
+          </div>
+          <div class="menu-divider m-0"></div>
+        </div>
+      }
+
+      <div class="menu-divider m-0"></div>
+    </div>
+    <ng-container *ngTemplateOutlet="sidebarNav"></ng-container>
+  </ng-scrollbar >
+  <!-- END scrollbar -->
+
+  <ng-template #sidebarNav>
+    <!-- BEGIN menu -->
+    <div class="menu">
+      <div class="menu-header">Menú</div>
+
+      <!-- sidebar menu -->
+      <ng-container *ngFor="let menu of menus">
+        <div class="menu-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+             [ngClass]="{ 'expand': menu.state === 'expand', 'has-sub': menu.submenu?.length, 'd-none': menu.hide }">
+          <a class="menu-link" *ngIf="!menu.submenu" [routerLink]="menu.url">
+            <div class="menu-icon"><i class="{{ menu.icon }}"></i></div>
+            <div class="menu-text">{{ menu.title }}</div>
+          </a>
+
+          <a class="menu-link" *ngIf="menu.submenu" (click)="toggleSubmenu(menu, $event)">
+            <div class="menu-icon"><i class="{{ menu.icon }}"></i></div>
+            <div class="menu-text">{{ menu.title }}</div>
+            <div class="menu-caret"></div>
+          </a>
+
+          <div class="menu-submenu" *ngIf="menu.submenu?.length"
+               [style.display]="(menu.state === 'expand' && !appSettings.appSidebarMinified) ? 'block' : (menu.state === 'collapse') ? 'none' : ''">
+            <ng-container *ngFor="let sub of menu.submenu">
+              <div class="menu-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                   [ngClass]="{ 'expand': sub.state === 'expand', 'has-sub': sub.submenu?.length }">
+                <a class="menu-link" *ngIf="!sub.submenu" [routerLink]="sub.url">
+                  <div class="menu-text">{{ sub.title }}</div>
+                </a>
+
+                <a class="menu-link" *ngIf="sub.submenu" (click)="expandCollapseSubmenu(sub, menu.submenu, $event)">
+                  <div class="menu-text">{{ sub.title }}</div>
+                  <div class="menu-caret"></div>
+                </a>
+
+                <div class="menu-submenu" *ngIf="sub.submenu?.length"
+                     [style.display]="(sub.state === 'expand' && !appSettings.appSidebarMinified) ? 'block' : (sub.state === 'collapse') ? 'none' : ''">
+                  <ng-container *ngFor="let sub2 of sub.submenu">
+                    <div class="menu-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                         [ngClass]="{ 'expand': sub2.state === 'expand', 'has-sub': sub2.submenu?.length }">
+                      <a class="menu-link" *ngIf="!sub2.submenu" [routerLink]="sub2.url">
+                        <div class="menu-text">{{ sub2.title }}</div>
+                      </a>
+
+                      <a class="menu-link" *ngIf="sub2.submenu" (click)="expandCollapseSubmenu(sub2, sub.submenu, $event)">
+                        <div class="menu-text">{{ sub2.title }}</div>
+                        <div class="menu-caret"></div>
+                      </a>
+
+                      <div class="menu-submenu" *ngIf="sub2.submenu?.length"
+                           [style.display]="(sub2.state === 'expand' && !appSettings.appSidebarMinified) ? 'block' : (sub2.state === 'collapse') ? 'none' : ''">
+                        <ng-container *ngFor="let sub3 of sub2.submenu">
+                          <div class="menu-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                            <a class="menu-link" [routerLink]="sub3.url">
+                              <div class="menu-text">{{ sub3.title }}</div>
+                            </a>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- BEGIN minify-button -->
+      <div class="menu-item d-flex">
+        <a href="javascript:;" class="app-sidebar-minify-btn ms-auto" (click)="toggleAppSidebarMinified()"><i class="fa fa-angle-double-left"></i></a>
+      </div>
+      <!-- END minify-button -->
+    </div>
+    <!-- END menu -->
+  </ng-template>
+</div>
+<div class="app-sidebar-bg" [attr.data-bs-theme]="appSettings.appSidebarLight ? '' : 'dark'"></div>
+<div class="app-sidebar-mobile-backdrop">
+  <a href="javascript:;" (click)="toggleAppSidebarMobile()" class="stretched-link"></a>
+</div>
+<!-- END #sidebar -->
+@if (appSettings.appSidebarMinified) {
+  <float-sub-menu
+    [menus]="appSidebarFloatSubMenu"
+    [top]="appSidebarFloatSubMenuTop"
+    [left]="appSidebarFloatSubMenuLeft"
+    [right]="appSidebarFloatSubMenuRight"
+    [bottom]="appSidebarFloatSubMenuBottom"
+    [arrowTop]="appSidebarFloatSubMenuArrowTop"
+    [arrowBottom]="appSidebarFloatSubMenuArrowBottom"
+    [lineTop]="appSidebarFloatSubMenuLineTop"
+    [lineBottom]="appSidebarFloatSubMenuLineBottom"
+    (remainAppSidebarFloatSubMenu)="remainAppSidebarFloatSubMenu()"
+    (hideAppSidebarFloatSubMenu)="hideAppSidebarFloatSubMenu()"
+    (calculateAppSidebarFloatSubMenuPosition)="calculateAppSidebarFloatSubMenuPosition()"
+  ></float-sub-menu>
+}

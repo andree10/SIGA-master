@@ -1,0 +1,67 @@
+.btn-circle.btn-primary {
+  background-color: #0d6efd; /* Azul Bootstrap */
+  border-color: #0d6efd;
+}
+
+.btn-circle.btn-primary:hover {
+  background-color: #1971b6; /* Más oscuro */
+  border-color: #1971b6;
+}
+
+/* Que el container ocupe toda la altura */
+.vh-100 {
+  min-height: 100vh;
+}
+
+/* Card más grande y flexible */
+.empresa-card {
+    width: 100%;
+    height: 70vh;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 1.5rem;
+   margin-top: 3rem;
+  flex-grow: 1;
+}
+
+/* Título más grande */
+.titulo-empresa {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #0c0e14b2; /* azul primario */
+}
+
+.container-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem; /* espacio para el título */
+  height: calc(100vh - 4rem); /* altura total ventana menos espacio para márgenes/título */
+  padding: 0 1rem;
+}
+
+.empresa-card .card-header {
+  background-color: #263238;
+  color: #ffffff;
+}
+
+.btn-guardar { background: #0d6efd; color: #fff; }
+.btn-actualizar { background: #198754; color: #fff; }
+.nav-link.completed { color: #198754; }
+.nav-link.active { font-weight: bold; }
+
+
+.header-empresa {
+  background-color: #263238; // mismo color oscuro del screenshot
+  color: #ffffff;
+}
+
+.header-empresa h5 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.header-empresa .btn {
+  min-width: 110px;
+}

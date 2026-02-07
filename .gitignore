@@ -1,0 +1,16 @@
+# Archivos de Angular que no deben subirse
+.angular/
+node_modules/
+dist/
+tmp/
+out-tsc/
+coverage/
+
+# Archivos comunes innecesarios
+*.log
+.env
+.DS_Store
+Thumbs.db
+
+# VS Code config
+.vscode/
