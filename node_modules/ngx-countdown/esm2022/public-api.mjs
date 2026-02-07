@@ -1,0 +1,6 @@
+export * from './interfaces';
+export * from './countdown.component';
+export * from './countdown.timer';
+export * from './countdown.module';
+export * from './provide';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljLWFwaS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL2xpYi9zcmMvcHVibGljLWFwaS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxjQUFjLGNBQWMsQ0FBQztBQUM3QixjQUFjLHVCQUF1QixDQUFDO0FBQ3RDLGNBQWMsbUJBQW1CLENBQUM7QUFDbEMsY0FBYyxvQkFBb0IsQ0FBQztBQUNuQyxjQUFjLFdBQVcsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCAqIGZyb20gJy4vaW50ZXJmYWNlcyc7XG5leHBvcnQgKiBmcm9tICcuL2NvdW50ZG93bi5jb21wb25lbnQnO1xuZXhwb3J0ICogZnJvbSAnLi9jb3VudGRvd24udGltZXInO1xuZXhwb3J0ICogZnJvbSAnLi9jb3VudGRvd24ubW9kdWxlJztcbmV4cG9ydCAqIGZyb20gJy4vcHJvdmlkZSc7XG4iXX0=
