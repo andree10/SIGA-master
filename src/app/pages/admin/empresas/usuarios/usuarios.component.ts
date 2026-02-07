@@ -25,8 +25,8 @@ export class UsuarioComponent implements OnInit {
       nombrecompleto: [''],
       cargo: [''],
       perfil: [''],
-      rol: [[]],
-      sucursales: [[]],
+      rol: [[]],           // Array para roles seleccionados
+      sucursales: [[]],    // Array para sucursales seleccionadas
       email: [''],
       fechaInicio: [''],
       fechaFin: [''],
@@ -45,7 +45,7 @@ export class UsuarioComponent implements OnInit {
     this.usuarioForm.reset({ rol: [], sucursales: [] });
     this.mostrarFormulario = true;
     this.botonGuardar = true;
-    this.formActivo = true; // <-- habilitar inputs
+    this.formActivo = true;
   }
 
   // Activar formulario al editar
@@ -53,7 +53,7 @@ export class UsuarioComponent implements OnInit {
     this.usuarioForm.patchValue(u);
     this.mostrarFormulario = true;
     this.botonGuardar = false;
-    this.formActivo = true; // <-- habilitar inputs
+    this.formActivo = true;
   }
 
   // Manejo de foto con vista previa
@@ -65,32 +65,6 @@ export class UsuarioComponent implements OnInit {
       reader.onload = () => this.usuarioForm.patchValue({ foto: reader.result });
       reader.readAsDataURL(file);
     }
-  }
-
-  // Toggle de roles
-  toggleRol(e: any) {
-    if (!this.formActivo) return;
-    const rol = e.target.value;
-    let selectedRoles = [...(this.usuarioForm.value.rol || [])];
-    if (e.target.checked) selectedRoles.push(rol);
-    else selectedRoles = selectedRoles.filter(r => r !== rol);
-    this.usuarioForm.patchValue({ rol: selectedRoles });
-  }
-
-  // Agregar / quitar sucursales
-  agregarSucursal(s: string) {
-    if (!this.formActivo) return;
-    const seleccionadas = [...(this.usuarioForm.value.sucursales || [])];
-    if (!seleccionadas.includes(s)) {
-      seleccionadas.push(s);
-      this.usuarioForm.patchValue({ sucursales: seleccionadas });
-    }
-  }
-
-  removerSucursal(s: string) {
-    if (!this.formActivo) return;
-    const seleccionadas = [...(this.usuarioForm.value.sucursales || [])].filter(x => x !== s);
-    this.usuarioForm.patchValue({ sucursales: seleccionadas });
   }
 
   // Guardar o actualizar usuario
@@ -108,7 +82,7 @@ export class UsuarioComponent implements OnInit {
     }
 
     this.mostrarFormulario = false;
-    this.formActivo = false; // <-- deshabilitar después de guardar
+    this.formActivo = false;
     this.usuarioForm.reset({ rol: [], sucursales: [] });
     this.botonGuardar = true;
   }

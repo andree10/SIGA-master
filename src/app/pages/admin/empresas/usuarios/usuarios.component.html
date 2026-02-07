@@ -32,33 +32,16 @@
         <div class="row mb-3">
           <div class="col-md-6 mb-2">
             <label class="form-label">Roles:</label>
-            <div class="d-flex gap-2 flex-wrap">
-              <div *ngFor="let r of roles" class="form-check">
-                <input class="form-check-input" type="checkbox"
-                       [value]="r"
-                       [checked]="usuarioForm.value.rol.includes(r)"
-                       (change)="toggleRol($event)"
-                       [disabled]="!formActivo">
-                <label class="form-check-label">{{ r }}</label>
-              </div>
-            </div>
+            <select class="form-select" formControlName="rol" multiple [disabled]="!formActivo">
+              <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+            </select>
           </div>
 
           <div class="col-md-6 mb-2">
             <label class="form-label">Sucursales:</label>
-            <div class="d-flex gap-2 flex-wrap mb-2">
-              <button type="button" class="btn btn-outline-primary btn-sm"
-                      *ngFor="let s of todasSucursales"
-                      (click)="agregarSucursal(s)"
-                      [disabled]="!formActivo">
-                {{ s }}
-              </button>
-            </div>
-            <div>
-              <span *ngFor="let s of usuarioForm.value.sucursales" class="badge bg-success me-1">
-                {{ s }} <span style="cursor:pointer;" (click)="removerSucursal(s)" [style.pointerEvents]="formActivo ? 'auto' : 'none'">×</span>
-              </span>
-            </div>
+            <select class="form-select" formControlName="sucursales" multiple [disabled]="!formActivo">
+              <option *ngFor="let s of todasSucursales" [value]="s">{{ s }}</option>
+            </select>
           </div>
         </div>
 
@@ -78,7 +61,6 @@
         <div class="mb-3">
           <label class="form-label">Foto:</label>
           <input type="file" class="form-control mb-2" (change)="onFotoChange($event)" [disabled]="!formActivo">
-
           <div *ngIf="usuarioForm.value.foto">
             <img [src]="usuarioForm.value.foto" alt="Vista previa" width="100" class="mt-2 rounded">
           </div>
@@ -123,12 +105,8 @@
             <td>{{ u.cargo }}</td>
             <td>{{ u.perfil }}</td>
             <td>{{ u.email }}</td>
-            <td>
-              <div *ngFor="let r of u.rol">{{ r }}</div>
-            </td>
-            <td>
-              <div *ngFor="let s of u.sucursales">{{ s }}</div>
-            </td>
+            <td>{{ u.rol.join(', ') }}</td>
+            <td>{{ u.sucursales.join(', ') }}</td>
             <td>{{ u.fechaInicio }}</td>
             <td>{{ u.fechaFin }}</td>
             <td>
