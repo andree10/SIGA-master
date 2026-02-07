@@ -15,3 +15,5 @@ Thumbs.db
 # VS Code config
 .vscode/node_modules/
 .angular/cache/
+node_modules/
+.angular/cache/
